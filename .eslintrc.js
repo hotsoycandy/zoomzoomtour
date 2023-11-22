@@ -17,6 +17,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    'require-await': 'error'
+    'require-await': 'error',
+    '@typescript-eslint/prefer-readonly': 'error'
   },
 };
