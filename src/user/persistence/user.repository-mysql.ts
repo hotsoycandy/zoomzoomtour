@@ -21,4 +21,13 @@ export class UserRepositoryMysql implements UserRepository {
   async createUser(user: User): Promise<User> {
     return await this.userRepository.save(user)
   }
+
+  async getUser(findUserParams: {
+    email?: string
+    password?: string
+  }): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: pick(findUserParams, ['email', 'password']),
+    })
+  }
 }
