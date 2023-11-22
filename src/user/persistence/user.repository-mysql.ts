@@ -1,9 +1,9 @@
+import { pick } from 'lodash'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { UserRepository } from '../user.repository'
 import { User } from '../entity/user.entity'
-import { pick } from 'lodash'
 
 @Injectable()
 export class UserRepositoryMysql implements UserRepository {
