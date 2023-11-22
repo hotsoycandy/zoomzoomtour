@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
 import { UserRepository } from './user.repository'
 import { User } from './entity/user.entity'
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async signup(signupParams: {
     email: string
@@ -13,5 +17,22 @@ export class UserService {
     const user = this.userRepository.newUser(signupParams)
     await user.hashPassword()
     return await this.userRepository.createUser(user)
+  }
+
+  async signin(singinParams: {
+    email: string
+    password: string
+  }): Promise<{ token: string }> {
+    const { email, password } = singinParams
+
+    const user = await this.userRepository.getUser({
+      email,
+    })
+    if (user === null || !(await user.checkPassword(password))) {
+      throw new UnauthorizedException('email and password are not correct')
+    }
+    return {
+      token: await this.jwtService.signAsync({ email: user.email }),
+    }
   }
 }

@@ -19,4 +19,8 @@ export class User {
     this.password = await createHash(this.password, this.salt)
     return this
   }
+
+  async checkPassword(password: string): Promise<boolean> {
+    return this.password === (await createHash(password, this.salt))
+  }
 }

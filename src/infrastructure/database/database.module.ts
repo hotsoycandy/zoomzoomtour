@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigService } from '@nestjs/config'
 import { User } from 'src/user/entity/user.entity'
 
 function isDevEnv(NODE_ENV: string): boolean {
@@ -10,7 +10,6 @@ function isDevEnv(NODE_ENV: string): boolean {
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule.forRoot()],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'mysql',
