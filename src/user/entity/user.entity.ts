@@ -5,7 +5,7 @@ import { createSalt, createHash } from 'src/common/util/encrypt'
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
-  public idx!: string
+  public idx!: number
 
   @Column()
   public email!: string
