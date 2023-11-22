@@ -1,14 +1,15 @@
 import { pick } from 'lodash'
-import { Controller } from '@nestjs/common'
+import { Body, Controller, Post } from '@nestjs/common'
 import { UserService } from './user.service'
-import { SignupDto } from './dto/signup.dto'
 import { UserDto } from './dto/user.dto'
+import { SignupDto } from './dto/signup.dto'
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  async signup(signupDto: SignupDto): Promise<UserDto> {
+  @Post('/signup')
+  async signup(@Body() signupDto: SignupDto): Promise<UserDto> {
     const user = await this.userService.signup(
       pick(signupDto, ['email', 'password']),
     )
