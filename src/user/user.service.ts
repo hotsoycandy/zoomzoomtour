@@ -11,6 +11,7 @@ export class UserService {
     password: string
   }): Promise<User> {
     const user = this.userRepository.newUser(signupParams)
+    await user.hashPassword()
     return await this.userRepository.createUser(user)
   }
 }
