@@ -14,12 +14,6 @@
 
   - email
   - password
-  - nickname
-
-- Error
-  - 이메일 중복
-  - 비밀번호 정규식
-  - 닉네임 중복
 
 ### 공통 - 로그인
 
