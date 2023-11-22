@@ -33,7 +33,10 @@ export class UserService {
       throw new UnauthorizedException('email and password are not correct')
     }
     return {
-      token: await this.jwtService.signAsync({ email: user.email }),
+      token: await this.jwtService.signAsync({
+        idx: user.idx,
+        email: user.email,
+      }),
     }
   }
 
