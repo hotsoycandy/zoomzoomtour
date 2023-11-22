@@ -10,5 +10,5 @@ export class Tour {
   public title!: string
 
   @ManyToOne(() => User, (user) => user.tours)
-  public seller?: string
+  public seller?: User
 }
