@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
+import { Tour } from 'src/tour/entity/tour.entity'
 import { createSalt, createHash } from 'src/common/util/encrypt'
 
 @Entity({ name: 'users' })
@@ -14,6 +15,9 @@ export class User {
 
   @Column()
   public salt: string = createSalt()
+
+  @OneToMany(() => Tour, (tour) => tour.seller)
+  public tours?: Tour[]
 
   async hashPassword(): Promise<this> {
     this.password = await createHash(this.password, this.salt)
