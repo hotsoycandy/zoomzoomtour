@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { UserRepository } from './user.repository'
 import { User } from './entity/user.entity'
+import { pick } from 'lodash'
 
 @Injectable()
 export class UserService {
@@ -34,5 +35,9 @@ export class UserService {
     return {
       token: await this.jwtService.signAsync({ email: user.email }),
     }
+  }
+
+  async getUser(getUserParams: { idx: number }): Promise<User | null> {
+    return await this.userRepository.getUser(pick(getUserParams, ['idx']))
   }
 }

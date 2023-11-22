@@ -6,6 +6,7 @@ export abstract class UserRepository {
   abstract createUser(user: User): Promise<User>
 
   abstract getUser(findUserParams: {
+    idx?: number
     email?: string
     password?: string
   }): Promise<User | null>

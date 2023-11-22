@@ -23,11 +23,12 @@ export class UserRepositoryMysql implements UserRepository {
   }
 
   async getUser(findUserParams: {
+    idx?: number
     email?: string
     password?: string
   }): Promise<User | null> {
     return await this.userRepository.findOne({
-      where: pick(findUserParams, ['email', 'password']),
+      where: pick(findUserParams, ['idx', 'email', 'password']),
     })
   }
 }
