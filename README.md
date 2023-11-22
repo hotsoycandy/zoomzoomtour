@@ -7,7 +7,7 @@
 ### 공통 - 회원가입
 
 ```
-[POST] /auth/signup
+[POST] /users/signup
 ```
 
 - Body
@@ -18,7 +18,7 @@
 ### 공통 - 로그인
 
 ```
-[POST] /auth/signin
+[POST] /users/signin
 ```
 
 - Body
