@@ -1,11 +1,10 @@
 import { pick } from 'lodash'
-import { Body, Controller, Post } from '@nestjs/common'
-// service
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common'
+import { RequestWithUser } from 'src/infrastructure/server/auth/auth'
+import { LocalAuthGuard } from 'src/infrastructure/server/auth/local-auth.guard'
 import { UserService } from './user.service'
-// dto
 import { UserDto } from './dto/user.dto'
 import { SignupDto } from './dto/signup.dto'
-import { SigninDto } from './dto/signin.dto'
 
 @Controller('users')
 export class UserController {
@@ -19,8 +18,11 @@ export class UserController {
     return UserDto.from(user)
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('/signin')
-  async signin(@Body() signinDto: SigninDto): Promise<{ token: string }> {
-    return await this.userService.signin(pick(signinDto, ['email', 'password']))
+  async signin(@Request() req: RequestWithUser): Promise<{
+    access_token: string
+  }> {
+    return await this.userService.createJwtToken(req.user)
   }
 }

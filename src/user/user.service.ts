@@ -23,7 +23,7 @@ export class UserService {
   async signin(singinParams: {
     email: string
     password: string
-  }): Promise<{ token: string }> {
+  }): Promise<User> {
     const { email, password } = singinParams
 
     const user = await this.userRepository.getUser({
@@ -32,8 +32,12 @@ export class UserService {
     if (user === null || !(await user.checkPassword(password))) {
       throw new UnauthorizedException('email and password are not correct')
     }
+    return user
+  }
+
+  async createJwtToken(user: User): Promise<{ access_token: string }> {
     return {
-      token: await this.jwtService.signAsync({
+      access_token: await this.jwtService.signAsync({
         idx: user.idx,
         email: user.email,
       }),
