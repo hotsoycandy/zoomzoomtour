@@ -45,6 +45,7 @@ export class TourController {
     return tours.map((tour) => TourDto.from(tour))
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/:tourIdx/books')
   async createBook(
     @Request() req: RequestWithUser,
