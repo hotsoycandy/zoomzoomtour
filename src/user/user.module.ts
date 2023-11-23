@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UserController } from './user.controller'
 import { UserRepositoryModule } from './persistence/user.repository.module'
-import { AuthModule } from 'src/infrastructure/server/auth/auth.module'
+import { CustomJwtModule } from 'src/infrastructure/server/auth/custom-jwt.module'
 
 @Module({
-  imports: [UserRepositoryModule, AuthModule],
+  imports: [UserRepositoryModule, CustomJwtModule],
   providers: [UserService],
   controllers: [UserController],
   exports: [UserService],
