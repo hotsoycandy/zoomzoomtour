@@ -27,9 +27,6 @@ export class DayoffService {
     const { seller } = createDayoffParams
 
     const tour = await this.tourService.getTour(createDayoffParams.tourIdx)
-    if (tour === null) {
-      throw new NotFoundException('tour is not found')
-    }
     if (tour.seller.idx !== seller.idx) {
       throw new UnauthorizedException()
     }
