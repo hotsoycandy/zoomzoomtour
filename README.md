@@ -42,19 +42,19 @@
 ### 고객 - 투어 예약 신청
 
 ```
-[POST] /tours/:tourId/register
+[POST] /tours/:tourId/books
 ```
 
 ### 고객 - 투어 예약 신청 취소
 
 ```
-[DELETE] /tours/:tourId/register
+[DELETE] /tours/:tourId/books
 ```
 
 ### 고객 - 나의 투어 예약 신청 목록 조회
 
 ```
-[GET] /tours/register/me
+[GET] /tours/books/me
 ```
 
 ---
@@ -67,39 +67,39 @@
 
 - Body
   - title
+  - description
 
 ### 판매자 - 투어 예약 신청 목록 조회
 
 ```
-[GET] /tours/:tourId/register
+[GET] /tours/:tourId/books
 ```
 
 ### 판매자 - 투어 예약 승인
 
 ```
-[POST] /tours/:tourId/register/:registerId
+[POST] /tours/:tourId/books/:bookId
 ```
 
 ### 판매자 - 투어 예약 승인 토큰 조회
 
 ```
-[GET] /tours/:tourId/register/token
+[GET] /tours/:tourId/books/token
 ```
 
 ### 판매자 - 투어 휴일 지정
 
 ```
-[POST] /tour/:tourId/day-off
+[POST] /tours/:tourId/dayoff
 ```
 
 - Body
-  - dayOffDate
+  - type
+  - day
+  - date
 
 ### 판매자 - 투어 휴일 지정 취소
 
 ```
-[DELETE] /tour/:tourId/day-off
+[DELETE] /tours/:tourId/dayoff/:dayoffId
 ```
-
-- Body
-  - dayOffDate
