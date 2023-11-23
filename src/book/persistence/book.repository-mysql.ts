@@ -56,4 +56,8 @@ export class BookRepositoryMysql implements BookRepository {
       where: pick(getBooksParams, ['schedule', 'tourIdx', 'confirmed']),
     })
   }
+
+  async deleteBook(idx: number): Promise<void> {
+    await this.bookRepository.delete(idx)
+  }
 }

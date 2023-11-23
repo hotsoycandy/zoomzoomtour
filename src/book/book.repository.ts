@@ -23,4 +23,6 @@ export abstract class BookRepository {
     tourIdx?: number
     confirmed?: boolean
   }): Promise<Book[]>
+
+  abstract deleteBook(idx: number): Promise<void>
 }
