@@ -20,13 +20,19 @@ export class Dayoff {
   @Column({ type: 'enum', enum: DayoffType })
   public type!: DayoffType
 
-  @Column()
-  public date!: Date
+  @Column({ type: Number, nullable: true })
+  public month?: number | null
+
+  @Column({ type: Number, nullable: true })
+  public date?: number | null
+
+  @Column({ type: Number, nullable: true })
+  public day?: number | null
 
   @Column()
   public tourIdx!: number
 
   @ManyToOne(() => Tour, (tour) => tour.dayoffs)
   @JoinColumn({ name: 'tourIdx', referencedColumnName: 'idx' })
-  public Tour?: Tour
+  public tour?: Tour
 }
