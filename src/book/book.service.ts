@@ -1,13 +1,18 @@
 import { pick } from 'lodash'
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common'
+// services
 import { TourService } from 'src/tour/tour.service'
+// repos
 import { BookRepository } from './book.repository'
+// entities
 import { Book } from './entity/book.entity'
 import { User } from 'src/user/entity/user.entity'
+// libs
 import { getRandomInt } from 'src/common/util/get-random-int'
 
 @Injectable()
@@ -85,5 +90,30 @@ export class BookService {
       throw new UnauthorizedException()
     }
     return await this.bookRepository.getBooks(pick(getBooksParams, ['tourIdx']))
+  }
+
+  async confirmBook(confirmBookParams: {
+    tourIdx: number
+    sellerIdx: number
+    bookIdx: number
+  }): Promise<Book> {
+    const { tourIdx, sellerIdx, bookIdx } = confirmBookParams
+
+    const tour = await this.tourService.getTour(tourIdx)
+    if (tour.sellerIdx !== sellerIdx) {
+      throw new UnauthorizedException()
+    }
+
+    const book = await this.bookRepository.getBook({ idx: bookIdx })
+    if (book === null) {
+      throw new NotFoundException('book is not found')
+    }
+    if (book.confirmed) {
+      throw new BadRequestException('book is already confirmed')
+    }
+
+    book.confirmed = true
+    book.token = await this.generateToken()
+    return await this.bookRepository.save(book)
   }
 }
