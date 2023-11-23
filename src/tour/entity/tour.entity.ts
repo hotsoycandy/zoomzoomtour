@@ -32,6 +32,6 @@ export class Tour {
   @OneToMany(() => Book, (book) => book.tour)
   public books?: Book[]
 
-  @OneToMany(() => Dayoff, (dayoff) => dayoff.Tour)
+  @OneToMany(() => Dayoff, (dayoff) => dayoff.tour)
   public dayoffs?: Dayoff[]
 }
