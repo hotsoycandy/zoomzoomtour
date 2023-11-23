@@ -26,4 +26,6 @@ export abstract class BookRepository {
   }): Promise<Book[]>
 
   abstract deleteBook(idx: number): Promise<void>
+
+  abstract save(book: Book): Promise<Book>
 }

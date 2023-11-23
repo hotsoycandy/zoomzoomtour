@@ -66,4 +66,8 @@ export class BookRepositoryMysql implements BookRepository {
   async deleteBook(idx: number): Promise<void> {
     await this.bookRepository.delete(idx)
   }
+
+  async save(book: Book): Promise<Book> {
+    return await this.bookRepository.save(book)
+  }
 }
