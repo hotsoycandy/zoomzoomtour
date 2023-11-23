@@ -1,7 +1,8 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import { PrimaryGeneratedColumn, Column, ManyToOne, Entity } from 'typeorm'
 import { Tour } from 'src/tour/entity/tour.entity'
 import { User } from 'src/user/entity/user.entity'
 
+@Entity({ name: 'books' })
 export class Book {
   @PrimaryGeneratedColumn()
   public idx!: number
