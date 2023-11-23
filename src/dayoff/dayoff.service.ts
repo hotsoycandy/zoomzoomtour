@@ -48,6 +48,12 @@ export class DayoffService {
     return dayoff
   }
 
+  async getDayoffs(getDayoffsParams: { tourIdx?: number }): Promise<Dayoff[]> {
+    return await this.dayoffRepository.getDayoffs(
+      pick(getDayoffsParams, ['tourIdx']),
+    )
+  }
+
   async deleteDayoff(deleteDayoffParams: {
     dayoffIdx: number
     seller: User

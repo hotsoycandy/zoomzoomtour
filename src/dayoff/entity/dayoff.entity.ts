@@ -35,4 +35,24 @@ export class Dayoff {
   @ManyToOne(() => Tour, (tour) => tour.dayoffs)
   @JoinColumn({ name: 'tourIdx', referencedColumnName: 'idx' })
   public tour?: Tour
+
+  checkDayoff(checkDate: Date): boolean {
+    switch (this.type) {
+      case DayoffType.DATE:
+        if (
+          checkDate.getMonth() + 1 === this.month &&
+          checkDate.getDate() === this.date
+        ) {
+          return false
+        }
+        break
+      case DayoffType.DAY:
+        if (checkDate.getDay() === this.day) {
+          return false
+        }
+        break
+    }
+
+    return true
+  }
 }

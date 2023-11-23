@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common'
 // services
 import { TourService } from 'src/tour/tour.service'
+import { DayoffService } from 'src/dayoff/dayoff.service'
 // repos
 import { BookRepository } from './book.repository'
 // entities
@@ -19,6 +20,7 @@ import { getRandomInt } from 'src/common/util/get-random-int'
 export class BookService {
   constructor(
     private readonly tourService: TourService,
+    private readonly dayoffService: DayoffService,
     private readonly bookRepository: BookRepository,
   ) {}
 
@@ -39,7 +41,16 @@ export class BookService {
     tourIdx: number
     schedule: Date
   }): Promise<Book> {
-    const tour = await this.tourService.getTour(createBookParams.tourIdx)
+    const { tourIdx, schedule } = createBookParams
+
+    const tour = await this.tourService.getTour(tourIdx)
+
+    const dayoffs = await this.dayoffService.getDayoffs({ tourIdx })
+    dayoffs.forEach((dayoff) => {
+      if (!dayoff.checkDayoff(schedule)) {
+        throw new BadRequestException("it's day off")
+      }
+    })
 
     const books = await this.bookRepository.getBooks({
       ...pick(createBookParams, ['tourIdx', 'schedule']),

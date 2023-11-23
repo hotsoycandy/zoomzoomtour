@@ -17,5 +17,7 @@ export abstract class DayoffRepository {
     optionParams?: { relations?: string[] },
   ): Promise<Dayoff | null>
 
+  abstract getDayoffs(getDayoffsParams: { tourIdx?: number }): Promise<Dayoff[]>
+
   abstract deleteDayoff(dayoffIdx: number): Promise<void>
 }

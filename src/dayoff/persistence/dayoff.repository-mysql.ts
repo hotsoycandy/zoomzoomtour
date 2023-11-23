@@ -13,6 +13,12 @@ export class DayoffRepositoryMysql implements DayoffRepository {
     private readonly dayoffRepository: Repository<Dayoff>,
   ) {}
 
+  async getDayoffs(getDayoffsParams: { tourIdx?: number }): Promise<Dayoff[]> {
+    return await this.dayoffRepository.find({
+      where: pick(getDayoffsParams, ['tourIdx']),
+    })
+  }
+
   newDayoff(newDayoffParams: {
     type: DayoffType
     tour: Tour
