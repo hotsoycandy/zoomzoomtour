@@ -13,7 +13,10 @@ export abstract class BookRepository {
 
   abstract createBook(book: Book): Promise<Book>
 
-  abstract getBook(getBookParams: { token?: string }): Promise<Book | null>
+  abstract getBook(getBookParams: {
+    idx?: number
+    token?: string
+  }): Promise<Book | null>
 
   abstract getBooks(getBooksParams: {
     schedule?: Date

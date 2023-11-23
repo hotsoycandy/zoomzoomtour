@@ -38,9 +38,12 @@ export class BookRepositoryMysql implements BookRepository {
     return await this.bookRepository.save(book)
   }
 
-  async getBook(getBookParams: { token?: string }): Promise<Book | null> {
+  async getBook(getBookParams: {
+    idx?: number
+    token?: string
+  }): Promise<Book | null> {
     return await this.bookRepository.findOne({
-      where: pick(getBookParams, ['token']),
+      where: pick(getBookParams, ['idx', 'token']),
     })
   }
 
@@ -49,7 +52,6 @@ export class BookRepositoryMysql implements BookRepository {
     tourIdx?: number
     confirmed?: boolean
   }): Promise<Book[]> {
-    console.log(pick(getBooksParams, ['schedule', 'tourIdx', 'confirmed']))
     return await this.bookRepository.find({
       where: pick(getBooksParams, ['schedule', 'tourIdx', 'confirmed']),
     })
