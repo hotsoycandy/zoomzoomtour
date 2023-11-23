@@ -7,6 +7,8 @@ import {
 } from 'typeorm'
 import { Tour } from 'src/tour/entity/tour.entity'
 import { User } from 'src/user/entity/user.entity'
+import { getDateOnly } from 'src/common/util/get-date-only'
+import { getDateDiff } from 'src/common/util/get-date-diff'
 
 @Entity({ name: 'books' })
 export class Book {
@@ -36,4 +38,10 @@ export class Book {
   @ManyToOne(() => Tour, (tour) => tour.books)
   @JoinColumn({ name: 'tourIdx', referencedColumnName: 'idx' })
   public tour?: Tour
+
+  checkCancel(): boolean {
+    const today = getDateOnly(new Date())
+    const diff = getDateDiff(today, this.schedule)
+    return diff <= 3
+  }
 }

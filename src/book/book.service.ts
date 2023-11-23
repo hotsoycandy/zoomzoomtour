@@ -88,6 +88,9 @@ export class BookService {
     if (book.buyerIdx !== buyerIdx) {
       throw new UnauthorizedException()
     }
+    if (book.checkCancel()) {
+      throw new BadRequestException("it's too late to cancel")
+    }
 
     await this.bookRepository.deleteBook(bookIdx)
   }
