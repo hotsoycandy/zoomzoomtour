@@ -10,5 +10,7 @@ export abstract class TourRepository {
 
   abstract createTour(tour: Tour): Promise<Tour>
 
+  abstract getTour(tourIdx: number): Promise<Tour | null>
+
   abstract getTours(): Promise<Tour[]>
 }

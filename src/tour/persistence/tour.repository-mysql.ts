@@ -27,6 +27,10 @@ export class TourRepositoryMysql implements TourRepository {
     return await this.tourRepository.save(tour)
   }
 
+  async getTour(tourIdx: number): Promise<Tour | null> {
+    return await this.tourRepository.findOne({ where: { idx: tourIdx } })
+  }
+
   async getTours(): Promise<Tour[]> {
     return await this.tourRepository.find()
   }
