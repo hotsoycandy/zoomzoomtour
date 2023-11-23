@@ -48,7 +48,7 @@
 ### 고객 - 투어 예약 신청 취소
 
 ```
-[DELETE] /tours/:tourIdx/books/:booIdx
+[DELETE] /tours/books/:booIdx
 ```
 
 ### 고객 - 나의 투어 예약 신청 목록 조회

@@ -1,12 +1,13 @@
 import { pick } from 'lodash'
 import {
   Controller,
-  Post,
-  Get,
-  Body,
   Request,
   UseGuards,
+  Post,
+  Get,
+  Delete,
   Param,
+  Body,
 } from '@nestjs/common'
 import { RequestWithUser } from 'src/infrastructure/server/auth/auth'
 import { JwtAuthGuard } from 'src/infrastructure/server/auth/jwt-auth.guard'
@@ -58,5 +59,17 @@ export class TourController {
       schedule: createBookDto.schedule,
     })
     return BookDto.from(book)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/books/:bookIdx')
+  async deleteBook(
+    @Request() req: RequestWithUser,
+    @Param('bookIdx') bookIdx: number,
+  ): Promise<void> {
+    await this.bookService.deleteBook({
+      buyer: req.user,
+      bookIdx,
+    })
   }
 }
