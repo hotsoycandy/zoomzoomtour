@@ -1,8 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
-import { UserRepository } from './user.repository'
-import { User } from './entity/user.entity'
 import { pick } from 'lodash'
+import { JwtService } from '@nestjs/jwt'
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
+import { User } from './entity/user.entity'
+import { UserRepository } from './user.repository'
 
 @Injectable()
 export class UserService {
@@ -15,6 +19,13 @@ export class UserService {
     email: string
     password: string
   }): Promise<User> {
+    const emailDuplicatedUser = await this.getUser({
+      email: signupParams.email,
+    })
+    if (emailDuplicatedUser !== null) {
+      throw new BadRequestException('duplicated email')
+    }
+
     const user = this.userRepository.newUser(signupParams)
     await user.hashPassword()
     return await this.userRepository.createUser(user)
@@ -44,7 +55,12 @@ export class UserService {
     }
   }
 
-  async getUser(getUserParams: { idx: number }): Promise<User | null> {
-    return await this.userRepository.getUser(pick(getUserParams, ['idx']))
+  async getUser(getUserParams: {
+    idx?: number
+    email?: string
+  }): Promise<User | null> {
+    return await this.userRepository.getUser(
+      pick(getUserParams, ['idx', 'email']),
+    )
   }
 }
