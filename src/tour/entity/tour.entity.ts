@@ -12,6 +12,6 @@ export class Tour {
   @Column({ length: 1000 })
   public description!: string
 
-  @ManyToOne(() => User, (user) => user.tours)
+  @ManyToOne(() => User, (user) => user.tours, { eager: true })
   public seller?: User
 }

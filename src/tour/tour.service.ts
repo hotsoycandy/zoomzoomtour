@@ -18,4 +18,8 @@ export class TourService {
     )
     return await this.tourRepository.createTour(tour)
   }
+
+  async getTours(): Promise<Tour[]> {
+    return await this.tourRepository.getTours()
+  }
 }

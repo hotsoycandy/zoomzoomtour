@@ -1,5 +1,5 @@
 import { pick } from 'lodash'
-import { Controller, Post, Body, Request, UseGuards } from '@nestjs/common'
+import { Controller, Post, Get, Body, Request, UseGuards } from '@nestjs/common'
 import { TourService } from './tour.service'
 import { JwtAuthGuard } from 'src/infrastructure/server/auth/jwt-auth.guard'
 import { RequestWithUser } from 'src/infrastructure/server/auth/auth'
@@ -21,5 +21,11 @@ export class TourController {
       seller: req.user,
     })
     return TourDto.from(tour)
+  }
+
+  @Get()
+  async getTours(): Promise<TourDto[]> {
+    const tours = await this.tourSerivce.getTours()
+    return tours.map((tour) => TourDto.from(tour))
   }
 }

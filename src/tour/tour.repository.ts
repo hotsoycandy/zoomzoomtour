@@ -9,4 +9,6 @@ export abstract class TourRepository {
   }): Tour
 
   abstract createTour(tour: Tour): Promise<Tour>
+
+  abstract getTours(): Promise<Tour[]>
 }
