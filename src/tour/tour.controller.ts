@@ -15,17 +15,21 @@ import { JwtAuthGuard } from 'src/infrastructure/server/auth/jwt-auth.guard'
 // services
 import { TourService } from './tour.service'
 import { BookService } from 'src/book/book.service'
+import { DayoffService } from 'src/dayoff/dayoff.service'
 // dtos
 import { TourDto } from './dto/tour.dto'
 import { CreateTourDto } from './dto/create-tour.dto'
 import { BookDto } from 'src/book/dto/book.dto'
 import { CreateBookDto } from 'src/book/dto/create-book.dto'
+import { CreateDayoffDto } from 'src/dayoff/dto/create-dayoff.dto'
+import { DayoffDto } from 'src/dayoff/dto/dayoff.dto'
 
 @Controller('tours')
 export class TourController {
   constructor(
     private readonly tourSerivce: TourService,
     private readonly bookService: BookService,
+    private readonly dayoffService: DayoffService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -120,5 +124,18 @@ export class TourController {
       token,
     })
     return BookDto.from(book)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/:tourIdx/dayoff')
+  async createDayoff(
+    @Body() createDayoffDto: CreateDayoffDto,
+    @Param('tourIdx') tourIdx: number,
+  ): Promise<DayoffDto> {
+    const dayoff = await this.dayoffService.createDayoff({
+      ...pick(createDayoffDto, ['type', 'month', 'date', 'day']),
+      tourIdx,
+    })
+    return DayoffDto.from(dayoff)
   }
 }
