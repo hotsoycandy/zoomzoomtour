@@ -21,6 +21,7 @@ export abstract class BookRepository {
   abstract getBooks(getBooksParams: {
     schedule?: Date
     tourIdx?: number
+    buyerIdx?: number
     confirmed?: boolean
   }): Promise<Book[]>
 

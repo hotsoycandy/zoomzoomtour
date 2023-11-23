@@ -64,4 +64,10 @@ export class BookService {
 
     await this.bookRepository.deleteBook(bookIdx)
   }
+
+  async getBooks(getBooksParams: { buyerIdx?: number }): Promise<Book[]> {
+    return await this.bookRepository.getBooks(
+      pick(getBooksParams, ['buyerIdx']),
+    )
+  }
 }

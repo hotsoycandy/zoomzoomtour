@@ -50,10 +50,16 @@ export class BookRepositoryMysql implements BookRepository {
   async getBooks(getBooksParams: {
     schedule?: Date
     tourIdx?: number
+    buyerIdx?: number
     confirmed?: boolean
   }): Promise<Book[]> {
     return await this.bookRepository.find({
-      where: pick(getBooksParams, ['schedule', 'tourIdx', 'confirmed']),
+      where: pick(getBooksParams, [
+        'schedule',
+        'tourIdx',
+        'buyerIdx',
+        'confirmed',
+      ]),
     })
   }
 
