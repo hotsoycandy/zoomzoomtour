@@ -1,5 +1,5 @@
-import * as crypto from 'crypto'
-import * as util from 'node:util'
+import crypto from 'crypto'
+import util from 'node:util'
 
 const pbkdf2 = util.promisify(crypto.pbkdf2)
 
