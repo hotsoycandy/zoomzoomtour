@@ -56,6 +56,14 @@ export class BookService {
     return await this.bookRepository.createBook(book)
   }
 
+  async getBook(bookIdx: number): Promise<Book> {
+    const book = await this.bookRepository.getBook({ idx: bookIdx })
+    if (book === null) {
+      throw new NotFoundException('book is not found')
+    }
+    return book
+  }
+
   async deleteBook(deleteBookParams: {
     buyer: User
     bookIdx: number
@@ -65,10 +73,9 @@ export class BookService {
       buyer: { idx: buyerIdx },
     } = deleteBookParams
 
-    const book = await this.bookRepository.getBook({ idx: bookIdx })
-
-    if (book === null || book.buyerIdx !== buyerIdx) {
-      throw new NotFoundException('book is not found')
+    const book = await this.getBook(bookIdx)
+    if (book.buyerIdx !== buyerIdx) {
+      throw new UnauthorizedException()
     }
 
     await this.bookRepository.deleteBook(bookIdx)
@@ -104,10 +111,7 @@ export class BookService {
       throw new UnauthorizedException()
     }
 
-    const book = await this.bookRepository.getBook({ idx: bookIdx })
-    if (book === null) {
-      throw new NotFoundException('book is not found')
-    }
+    const book = await this.getBook(bookIdx)
     if (book.confirmed) {
       throw new BadRequestException('book is already confirmed')
     }
@@ -126,8 +130,11 @@ export class BookService {
       { token },
       { relations: ['tour'] },
     )
-    if (book === null || book?.tour?.seller.idx !== sellerIdx) {
+    if (book === null) {
       throw new NotFoundException('token is not found')
+    }
+    if (book?.tour?.seller.idx !== sellerIdx) {
+      throw new UnauthorizedException()
     }
     return book
   }
