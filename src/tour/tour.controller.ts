@@ -79,4 +79,17 @@ export class TourController {
     const books = await this.bookService.getBooks({ buyerIdx: req.user.idx })
     return books.map((book) => BookDto.from(book))
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:tourIdx/books')
+  async getTourBooks(
+    @Request() req: RequestWithUser,
+    @Param('tourIdx') tourIdx: number,
+  ): Promise<BookDto[]> {
+    const books = await this.bookService.getTourBooks({
+      tourIdx,
+      sellerIdx: req.user.idx,
+    })
+    return books.map((book) => BookDto.from(book))
+  }
 }
