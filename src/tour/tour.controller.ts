@@ -108,4 +108,17 @@ export class TourController {
     })
     return BookDto.from(book)
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/books/token/:token')
+  async getBookByToken(
+    @Request() req: RequestWithUser,
+    @Param('token') token: string,
+  ): Promise<BookDto> {
+    const book = await this.bookService.getBookByToken({
+      sellerIdx: req.user.idx,
+      token,
+    })
+    return BookDto.from(book)
+  }
 }

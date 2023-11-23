@@ -84,7 +84,7 @@
 ### 판매자 - 투어 예약 승인 토큰 조회
 
 ```
-[GET] /tours/:tourIdx/books/token
+[GET] /tours/books/token/:token
 ```
 
 ### 판매자 - 투어 휴일 지정
