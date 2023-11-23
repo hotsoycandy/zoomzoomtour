@@ -1,5 +1,9 @@
 import { pick } from 'lodash'
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { TourService } from 'src/tour/tour.service'
 import { BookRepository } from './book.repository'
 import { Book } from './entity/book.entity'
@@ -69,5 +73,17 @@ export class BookService {
     return await this.bookRepository.getBooks(
       pick(getBooksParams, ['buyerIdx']),
     )
+  }
+
+  async getTourBooks(getBooksParams: {
+    sellerIdx: number
+    tourIdx: number
+  }): Promise<Book[]> {
+    const { tourIdx, sellerIdx } = getBooksParams
+    const tour = await this.tourService.getTour(tourIdx)
+    if (tour.sellerIdx !== sellerIdx) {
+      throw new UnauthorizedException()
+    }
+    return await this.bookRepository.getBooks(pick(getBooksParams, ['tourIdx']))
   }
 }
