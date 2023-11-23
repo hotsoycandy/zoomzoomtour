@@ -22,6 +22,18 @@ export class BookService {
     private readonly bookRepository: BookRepository,
   ) {}
 
+  private async generateToken(): Promise<string> {
+    while (true) {
+      const token = getRandomInt(
+        Math.pow(10, 9),
+        Math.pow(10, 10) - 1,
+      ).toString()
+
+      const book = await this.bookRepository.getBook({ token })
+      if (book === null) return token
+    }
+  }
+
   async createBook(createBookParams: {
     buyer: User
     tourIdx: number
@@ -42,18 +54,6 @@ export class BookService {
       token: autoConfirmed ? await this.generateToken() : null,
     })
     return await this.bookRepository.createBook(book)
-  }
-
-  private async generateToken(): Promise<string> {
-    while (true) {
-      const token = getRandomInt(
-        Math.pow(10, 9),
-        Math.pow(10, 10) - 1,
-      ).toString()
-
-      const book = await this.bookRepository.getBook({ token })
-      if (book === null) return token
-    }
   }
 
   async deleteBook(deleteBookParams: {
