@@ -5,6 +5,7 @@ import {
   UseGuards,
   Post,
   Get,
+  Put,
   Delete,
   Param,
   Body,
@@ -91,5 +92,20 @@ export class TourController {
       sellerIdx: req.user.idx,
     })
     return books.map((book) => BookDto.from(book))
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('/:tourIdx/books/:bookIdx/confirm')
+  async confirmBook(
+    @Request() req: RequestWithUser,
+    @Param('tourIdx') tourIdx: number,
+    @Param('bookIdx') bookIdx: number,
+  ): Promise<BookDto> {
+    const book = await this.bookService.confirmBook({
+      tourIdx,
+      bookIdx,
+      sellerIdx: req.user.idx,
+    })
+    return BookDto.from(book)
   }
 }
