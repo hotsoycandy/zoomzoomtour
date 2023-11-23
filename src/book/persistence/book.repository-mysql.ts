@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import { isNil, pick } from 'lodash'
 import { Repository } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
@@ -38,12 +38,19 @@ export class BookRepositoryMysql implements BookRepository {
     return await this.bookRepository.save(book)
   }
 
-  async getBook(getBookParams: {
-    idx?: number
-    token?: string
-  }): Promise<Book | null> {
+  async getBook(
+    getBookParams: {
+      idx?: number
+      token?: string
+    },
+    optionParams: {
+      relations?: string[]
+    } = {},
+  ): Promise<Book | null> {
+    const { relations } = optionParams
     return await this.bookRepository.findOne({
       where: pick(getBookParams, ['idx', 'token']),
+      ...(!isNil(relations) && { relations }),
     })
   }
 
