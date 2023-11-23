@@ -13,9 +13,13 @@ export class TourRepositoryMysql implements TourRepository {
     private readonly tourRepository: Repository<Tour>,
   ) {}
 
-  newTour(createTourParams: { title: string; seller: User }): Tour {
+  newTour(createTourParams: {
+    title: string
+    description: string
+    seller: User
+  }): Tour {
     return this.tourRepository.create(
-      pick(createTourParams, ['title', 'seller']),
+      pick(createTourParams, ['title', 'description', 'seller']),
     )
   }
 

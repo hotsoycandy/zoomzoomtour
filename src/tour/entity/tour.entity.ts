@@ -6,8 +6,11 @@ export class Tour {
   @PrimaryGeneratedColumn()
   public idx!: string
 
-  @Column()
+  @Column({ length: 100 })
   public title!: string
+
+  @Column({ length: 1000 })
+  public description!: string
 
   @ManyToOne(() => User, (user) => user.tours)
   public seller?: User
