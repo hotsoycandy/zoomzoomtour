@@ -116,4 +116,19 @@ export class BookService {
     book.token = await this.generateToken()
     return await this.bookRepository.save(book)
   }
+
+  async getBookByToken(getBookByTokenParams: {
+    sellerIdx: number
+    token: string
+  }): Promise<Book> {
+    const { token, sellerIdx } = getBookByTokenParams
+    const book = await this.bookRepository.getBook(
+      { token },
+      { relations: ['tour'] },
+    )
+    if (book === null || book?.tour?.seller.idx !== sellerIdx) {
+      throw new NotFoundException('token is not found')
+    }
+    return book
+  }
 }
