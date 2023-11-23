@@ -78,7 +78,7 @@
 ### 판매자 - 투어 예약 승인
 
 ```
-[POST] /tours/:tourIdx/books/:bookIdx
+[PUT] /tours/:tourIdx/books/:bookIdx/confirm
 ```
 
 ### 판매자 - 투어 예약 승인 토큰 조회
