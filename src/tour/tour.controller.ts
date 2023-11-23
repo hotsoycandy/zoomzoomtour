@@ -129,12 +129,14 @@ export class TourController {
   @UseGuards(JwtAuthGuard)
   @Post('/:tourIdx/dayoff')
   async createDayoff(
+    @Request() req: RequestWithUser,
     @Body() createDayoffDto: CreateDayoffDto,
     @Param('tourIdx') tourIdx: number,
   ): Promise<DayoffDto> {
     const dayoff = await this.dayoffService.createDayoff({
       ...pick(createDayoffDto, ['type', 'month', 'date', 'day']),
       tourIdx,
+      seller: req.user,
     })
     return DayoffDto.from(dayoff)
   }
