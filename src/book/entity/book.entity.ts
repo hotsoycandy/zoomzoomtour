@@ -1,4 +1,10 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne, Entity } from 'typeorm'
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  Entity,
+  JoinColumn,
+} from 'typeorm'
 import { Tour } from 'src/tour/entity/tour.entity'
 import { User } from 'src/user/entity/user.entity'
 
@@ -13,13 +19,17 @@ export class Book {
   @Column()
   public confirmed!: boolean
 
-  @Column({ default: null, nullable: true })
-  public token!: string
+  @Column({ type: String, default: null, nullable: true })
+  public token!: string | null
+
+  @Column()
+  public tourIdx!: number
 
   // relations
   @ManyToOne(() => User, (user) => user.books)
   public buyer?: User
 
   @ManyToOne(() => Tour, (tour) => tour.books)
+  @JoinColumn({ name: 'tourIdx', referencedColumnName: 'idx' })
   public tour?: Tour
 }
