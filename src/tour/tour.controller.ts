@@ -140,4 +140,16 @@ export class TourController {
     })
     return DayoffDto.from(dayoff)
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/dayoff/:dayoffIdx')
+  async deleteDayoff(
+    @Request() req: RequestWithUser,
+    @Param('dayoffIdx') dayoffIdx: number,
+  ): Promise<void> {
+    await this.dayoffService.deleteDayoff({
+      dayoffIdx,
+      seller: req.user,
+    })
+  }
 }

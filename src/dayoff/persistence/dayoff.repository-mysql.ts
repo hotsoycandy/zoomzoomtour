@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import { isNil, pick } from 'lodash'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -27,5 +27,20 @@ export class DayoffRepositoryMysql implements DayoffRepository {
 
   async createDayoff(dayoff: Dayoff): Promise<Dayoff> {
     return await this.dayoffRepository.save(dayoff)
+  }
+
+  async getDayoff(
+    dayoffIdx: number,
+    optionParams: { relations?: string[] } = {},
+  ): Promise<Dayoff | null> {
+    const { relations } = optionParams
+    return await this.dayoffRepository.findOne({
+      where: { idx: dayoffIdx },
+      ...(!isNil(relations) && { relations }),
+    })
+  }
+
+  async deleteDayoff(dayoffIdx: number): Promise<void> {
+    await this.dayoffRepository.delete(dayoffIdx)
   }
 }

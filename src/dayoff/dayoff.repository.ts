@@ -11,4 +11,11 @@ export abstract class DayoffRepository {
   }): Dayoff
 
   abstract createDayoff(dayoff: Dayoff): Promise<Dayoff>
+
+  abstract getDayoff(
+    dayoffIdx: number,
+    optionParams?: { relations?: string[] },
+  ): Promise<Dayoff | null>
+
+  abstract deleteDayoff(dayoffIdx: number): Promise<void>
 }

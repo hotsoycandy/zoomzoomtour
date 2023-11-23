@@ -40,4 +40,26 @@ export class DayoffService {
     })
     return await this.dayoffRepository.createDayoff(dayoff)
   }
+
+  async getDayoff(dayoffIdx: number): Promise<Dayoff> {
+    const dayoff = await this.dayoffRepository.getDayoff(dayoffIdx, {
+      relations: ['tour'],
+    })
+    if (dayoff === null) {
+      throw new NotFoundException('dayyoff is not found')
+    }
+    return dayoff
+  }
+
+  async deleteDayoff(deleteDayoffParams: {
+    dayoffIdx: number
+    seller: User
+  }): Promise<void> {
+    const { dayoffIdx, seller } = deleteDayoffParams
+    const dayoff = await this.getDayoff(dayoffIdx)
+    if (dayoff.tour?.seller.idx !== seller.idx) {
+      throw new UnauthorizedException()
+    }
+    await this.dayoffRepository.deleteDayoff(dayoffIdx)
+  }
 }
