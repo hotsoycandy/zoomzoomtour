@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigService } from '@nestjs/config'
 import { User } from 'src/user/entity/user.entity'
 import { Tour } from 'src/tour/entity/tour.entity'
+import { Book } from 'src/book/entity/book.entity'
 
 function isDevEnv(NODE_ENV: string): boolean {
   return ['development', 'test'].includes(NODE_ENV)
@@ -19,7 +20,7 @@ function isDevEnv(NODE_ENV: string): boolean {
         username: config.get('DATABASE_USERNAME'),
         password: config.get('DATABASE_PASSWORD'),
         database: config.get('DATABASE_NAME'),
-        entities: [User, Tour],
+        entities: [User, Tour, Book],
         synchronize: isDevEnv(config.get('NODE_ENV') as string),
         logging: isDevEnv(config.get('NODE_ENV') as string),
       }),
