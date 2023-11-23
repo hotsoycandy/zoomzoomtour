@@ -25,8 +25,12 @@ export class Book {
   @Column()
   public tourIdx!: number
 
+  @Column()
+  public buyerIdx!: number
+
   // relations
   @ManyToOne(() => User, (user) => user.books)
+  @JoinColumn({ name: 'buyerIdx', referencedColumnName: 'idx' })
   public buyer?: User
 
   @ManyToOne(() => Tour, (tour) => tour.books)
