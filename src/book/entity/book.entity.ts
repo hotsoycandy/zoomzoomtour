@@ -13,8 +13,8 @@ export class Book {
   @Column()
   public confirmed!: boolean
 
-  @Column({ default: null })
-  public token!: string | null
+  @Column({ default: null, nullable: true })
+  public token!: string
 
   // relations
   @ManyToOne(() => User, (user) => user.books)
