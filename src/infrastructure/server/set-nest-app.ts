@@ -8,6 +8,9 @@ import {
 export function setNestApp<NestApp extends INestApplication>(
   app: NestApp,
 ): void {
+  // set timezone utc+0
+  process.env.TZ = 'Europe/London'
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
