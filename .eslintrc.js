@@ -5,10 +5,14 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
+  plugins: [
+    '@typescript-eslint/eslint-plugin',
+    'promise'
+  ],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
+    'plugin:promise/recommended'
   ],
   root: true,
   env: {
@@ -18,6 +22,7 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     'require-await': 'error',
-    '@typescript-eslint/prefer-readonly': 'error'
+    '@typescript-eslint/prefer-readonly': 'error',
+    '@typescript-eslint/no-explicit-any': 'warn'
   },
 };
