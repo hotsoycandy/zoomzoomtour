@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm'
 import { Tour } from 'src/tour/entity/tour.entity'
+import { getAllDatesInMonth } from 'src/common/util/get-all-dates-in-month'
 
 export enum DayoffType {
   DAY = 'DAY',
@@ -54,5 +55,20 @@ export class Dayoff {
     }
 
     return true
+  }
+
+  static getTourAvailable(
+    year: number,
+    month: number,
+    dayoffs: Dayoff[],
+  ): number[] {
+    const tourAvailable: number[] = getAllDatesInMonth(year, month).reduce(
+      (newDates: number[], date) =>
+        dayoffs.every((dayoff) => dayoff.checkDayoff(date))
+          ? [...newDates, date.getDate()]
+          : newDates,
+      [],
+    )
+    return tourAvailable
   }
 }
