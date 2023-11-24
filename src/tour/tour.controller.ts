@@ -9,6 +9,8 @@ import {
   Delete,
   Param,
   Body,
+  Inject,
+  forwardRef,
 } from '@nestjs/common'
 import { RequestWithUser } from 'src/infrastructure/server/auth/auth'
 import { JwtAuthGuard } from 'src/infrastructure/server/auth/jwt-auth.guard'
@@ -28,7 +30,9 @@ import { DayoffDto } from 'src/dayoff/dto/dayoff.dto'
 export class TourController {
   constructor(
     private readonly tourSerivce: TourService,
+    @Inject(forwardRef(() => BookService))
     private readonly bookService: BookService,
+    @Inject(forwardRef(() => DayoffService))
     private readonly dayoffService: DayoffService,
   ) {}
 
@@ -49,6 +53,15 @@ export class TourController {
   async getTours(): Promise<TourDto[]> {
     const tours = await this.tourSerivce.getTours()
     return tours.map((tour) => TourDto.from(tour))
+  }
+
+  @Get('/:tourIdx/year/:year/month/:month')
+  async getTourAvailable(
+    @Param('tourIdx') tourIdx: number,
+    @Param('year') year: number,
+    @Param('month') month: number,
+  ): Promise<number[]> {
+    return await this.tourSerivce.getTourAvailable({ tourIdx, year, month })
   }
 
   @UseGuards(JwtAuthGuard)
