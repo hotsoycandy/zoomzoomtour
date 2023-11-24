@@ -1,12 +1,24 @@
 import { pick } from 'lodash'
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common'
 import { TourRepository } from './tour.repository'
 import { Tour } from './entity/tour.entity'
 import { User } from 'src/user/entity/user.entity'
+import { RedisService } from 'src/infrastructure/redis/redis.service'
+import { DayoffService } from 'src/dayoff/dayoff.service'
 
 @Injectable()
 export class TourService {
-  constructor(private readonly tourRepository: TourRepository) {}
+  constructor(
+    private readonly tourRepository: TourRepository,
+    private readonly redisService: RedisService,
+    @Inject(forwardRef(() => DayoffService))
+    private readonly dayoffService: DayoffService,
+  ) {}
 
   async createTour(createTourParams: {
     title: string

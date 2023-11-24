@@ -1,8 +1,10 @@
 import { pick } from 'lodash'
 import {
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  forwardRef,
 } from '@nestjs/common'
 import { TourService } from 'src/tour/tour.service'
 import { DayoffRepository } from './dayoff.repository'
@@ -13,6 +15,7 @@ import { User } from 'src/user/entity/user.entity'
 export class DayoffService {
   constructor(
     private readonly dayoffRepository: DayoffRepository,
+    @Inject(forwardRef(() => TourService))
     private readonly tourService: TourService,
   ) {}
 
