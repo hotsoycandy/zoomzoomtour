@@ -1,7 +1,8 @@
+import { isNil } from 'lodash'
+import { createClient } from 'redis'
+import { Repository } from 'redis-om'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Repository } from 'redis-om'
-import { createClient } from 'redis'
 import { tourAvailableSchema } from './schema/tour-available.schema'
 
 @Injectable()
@@ -38,31 +39,47 @@ export class RedisService {
     )
   }
 
-  private getTourAvailableKey(tourIdx: number, month: number): string {
-    return `${tourIdx}-${month}`
+  private getTourAvailableKey(targetParams: {
+    tourIdx: number
+    year: number
+    month: number
+  }): string {
+    const { tourIdx, year, month } = targetParams
+    return `${tourIdx}-${year}-${month}`
   }
 
   async setTourAvailable(
-    tourIdx: number,
-    month: number,
+    targetParams: {
+      tourIdx: number
+      year: number
+      month: number
+    },
     dates: number[],
   ): Promise<void> {
     await this.tourAvailableRepository.save(
-      this.getTourAvailableKey(tourIdx, month),
+      this.getTourAvailableKey(targetParams),
       { dates },
     )
   }
 
-  async getTourAvailable(tourIdx: number, month: number): Promise<number[]> {
+  async getTourAvailable(targetParams: {
+    tourIdx: number
+    year: number
+    month: number
+  }): Promise<number[] | null> {
     const { dates } = await this.tourAvailableRepository.fetch(
-      this.getTourAvailableKey(tourIdx, month),
+      this.getTourAvailableKey(targetParams),
     )
-    return dates as number[]
+    return !isNil(dates) ? (dates as number[]) : null
   }
 
-  async deleteTourAvailable(tourIdx: number, month: number): Promise<void> {
+  async deleteTourAvailable(targetParams: {
+    tourIdx: number
+    year: number
+    month: number
+  }): Promise<void> {
     await this.tourAvailableRepository.remove(
-      this.getTourAvailableKey(tourIdx, month),
+      this.getTourAvailableKey(targetParams),
     )
   }
 }
