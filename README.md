@@ -1,6 +1,4 @@
-# zoomzoomtour pretest
-
-줌줌투어 사전과제
+# zoomzoomtour
 
 ## API Spec
 
@@ -95,7 +93,9 @@
 
 - Body
   - type
+  - month
   - date
+  - day
 
 ### 판매자 - 투어 휴일 지정 취소
 
