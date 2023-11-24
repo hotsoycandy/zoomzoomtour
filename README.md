@@ -1,30 +1,22 @@
-# zoomzoomtour pretest
-
-줌줌투어 사전과제
+# zoomzoomtour
 
 ## API Spec
 
 ### 공통 - 회원가입
 
 ```
-[POST] /auth/signup
+[POST] /users/signup
 ```
 
 - Body
 
   - email
   - password
-  - nickname
-
-- Error
-  - 이메일 중복
-  - 비밀번호 정규식
-  - 닉네임 중복
 
 ### 공통 - 로그인
 
 ```
-[POST] /auth/signin
+[POST] /users/signin
 ```
 
 - Body
@@ -40,7 +32,7 @@
 ### 공통 - 투어 일정 조회
 
 ```
-[GET] /tours/:tourId
+[GET] /tours/:tourIdx/year/:year/month/:month
 ```
 
 ---
@@ -48,19 +40,19 @@
 ### 고객 - 투어 예약 신청
 
 ```
-[POST] /tours/:tourId/register
+[POST] /tours/:tourIdx/books
 ```
 
 ### 고객 - 투어 예약 신청 취소
 
 ```
-[DELETE] /tours/:tourId/register
+[DELETE] /tours/books/:booIdx
 ```
 
 ### 고객 - 나의 투어 예약 신청 목록 조회
 
 ```
-[GET] /tours/register/me
+[GET] /tours/books/me
 ```
 
 ---
@@ -73,39 +65,40 @@
 
 - Body
   - title
+  - description
 
 ### 판매자 - 투어 예약 신청 목록 조회
 
 ```
-[GET] /tours/:tourId/register
+[GET] /tours/:tourIdx/books
 ```
 
 ### 판매자 - 투어 예약 승인
 
 ```
-[POST] /tours/:tourId/register/:registerId
+[PUT] /tours/:tourIdx/books/:bookIdx/confirm
 ```
 
 ### 판매자 - 투어 예약 승인 토큰 조회
 
 ```
-[GET] /tours/:tourId/register/token
+[GET] /tours/books/token/:token
 ```
 
 ### 판매자 - 투어 휴일 지정
 
 ```
-[POST] /tour/:tourId/day-off
+[POST] /tours/:tourIdx/dayoff
 ```
 
 - Body
-  - dayOffDate
+  - type
+  - month
+  - date
+  - day
 
 ### 판매자 - 투어 휴일 지정 취소
 
 ```
-[DELETE] /tour/:tourId/day-off
+[DELETE] /tours/:tourIdx/dayoff/:dayoffIdx
 ```
-
-- Body
-  - dayOffDate
