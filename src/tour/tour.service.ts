@@ -10,6 +10,7 @@ import { Tour } from './entity/tour.entity'
 import { User } from 'src/user/entity/user.entity'
 import { RedisService } from 'src/infrastructure/redis/redis.service'
 import { DayoffService } from 'src/dayoff/dayoff.service'
+import { Dayoff } from 'src/dayoff/entity/dayoff.entity'
 
 @Injectable()
 export class TourService {
@@ -29,6 +30,30 @@ export class TourService {
       pick(createTourParams, ['title', 'description', 'seller']),
     )
     return await this.tourRepository.createTour(tour)
+  }
+
+  async getTourAvailable(getTourAvailableParams: {
+    tourIdx: number
+    year: number
+    month: number
+  }): Promise<number[]> {
+    const { tourIdx, year, month } = getTourAvailableParams
+
+    const dates = await this.redisService.getTourAvailable({
+      tourIdx,
+      year,
+      month,
+    })
+    if (dates !== null) return dates
+
+    const dayoffs = await this.dayoffService.getDayoffs({ tourIdx })
+    const tourAvailable = Dayoff.getTourAvailable(year, month, dayoffs)
+
+    await this.redisService.setTourAvailable(
+      { tourIdx, year, month },
+      tourAvailable,
+    )
+    return tourAvailable
   }
 
   async getTour(tourIdx: number): Promise<Tour> {
