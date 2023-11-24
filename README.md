@@ -34,7 +34,7 @@
 ### 공통 - 투어 일정 조회
 
 ```
-[GET] /tours/:tourIdx
+[GET] /tours/:tourIdx/year/:year/month/:month
 ```
 
 ---
