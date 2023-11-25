@@ -7,6 +7,7 @@ import {
   forwardRef,
 } from '@nestjs/common'
 import { TourService } from 'src/tour/tour.service'
+import { RedisService } from 'src/infrastructure/redis/redis.service'
 import { DayoffRepository } from './dayoff.repository'
 import { Dayoff, DayoffType } from './entity/dayoff.entity'
 import { User } from 'src/user/entity/user.entity'
@@ -17,6 +18,7 @@ export class DayoffService {
     private readonly dayoffRepository: DayoffRepository,
     @Inject(forwardRef(() => TourService))
     private readonly tourService: TourService,
+    private readonly redisService: RedisService,
   ) {}
 
   async createDayoff(createDayoffParams: {
@@ -27,12 +29,15 @@ export class DayoffService {
     date?: number
     day?: number
   }): Promise<Dayoff> {
-    const { seller } = createDayoffParams
+    const { tourIdx, seller } = createDayoffParams
 
     const tour = await this.tourService.getTour(createDayoffParams.tourIdx)
     if (tour.seller.idx !== seller.idx) {
       throw new UnauthorizedException()
     }
+
+    // delete cached dates
+    await this.redisService.deleteTourAvailable(tourIdx)
 
     const dayoff = this.dayoffRepository.newDayoff({
       ...pick(createDayoffParams, ['type', 'month', 'date', 'day']),
@@ -67,5 +72,8 @@ export class DayoffService {
       throw new UnauthorizedException()
     }
     await this.dayoffRepository.deleteDayoff(dayoffIdx)
+
+    // delete cached dates
+    await this.redisService.deleteTourAvailable(dayoff.tourIdx)
   }
 }

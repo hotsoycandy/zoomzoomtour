@@ -45,7 +45,11 @@ export class RedisService {
     month: number
   }): string {
     const { tourIdx, year, month } = targetParams
-    return `${tourIdx}-${year}-${month}`
+    return `tourAvailableKey:${tourIdx}-${year}-${month}`
+  }
+
+  private getTourAvailableSetKey(tourIdx: number): string {
+    return `tourAvailableSetKey:${tourIdx.toString()}`
   }
 
   async setTourAvailable(
@@ -56,10 +60,13 @@ export class RedisService {
     },
     dates: number[],
   ): Promise<void> {
-    await this.tourAvailableRepository.save(
-      this.getTourAvailableKey(targetParams),
-      { dates },
-    )
+    const { tourIdx } = targetParams
+    const tourAvailableKey = this.getTourAvailableKey(targetParams)
+    const tourAvailableSetKey = this.getTourAvailableSetKey(tourIdx)
+    // cache dates
+    await this.tourAvailableRepository.save(tourAvailableKey, { dates })
+    // cache keys
+    await this.redisClient.sAdd(tourAvailableSetKey, tourAvailableKey)
   }
 
   async getTourAvailable(targetParams: {
@@ -73,13 +80,15 @@ export class RedisService {
     return !isNil(dates) ? (dates as number[]) : null
   }
 
-  async deleteTourAvailable(targetParams: {
-    tourIdx: number
-    year: number
-    month: number
-  }): Promise<void> {
-    await this.tourAvailableRepository.remove(
-      this.getTourAvailableKey(targetParams),
-    )
+  async deleteTourAvailable(tourIdx: number): Promise<void> {
+    const tourAvailableSetKey = this.getTourAvailableSetKey(tourIdx)
+
+    const tourAvailableKeys =
+      await this.redisClient.sMembers(tourAvailableSetKey)
+
+    for (const tourAvailableKey of tourAvailableKeys) {
+      await this.tourAvailableRepository.remove(tourAvailableKey)
+    }
+    await this.redisClient.del(tourAvailableSetKey)
   }
 }
