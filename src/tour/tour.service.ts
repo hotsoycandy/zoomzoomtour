@@ -39,6 +39,7 @@ export class TourService {
   }): Promise<number[]> {
     const { tourIdx, year, month } = getTourAvailableParams
 
+    // get cached tour dates
     const dates = await this.redisService.getTourAvailable({
       tourIdx,
       year,
@@ -46,9 +47,11 @@ export class TourService {
     })
     if (dates !== null) return dates
 
+    // calculate tour dates
     const dayoffs = await this.dayoffService.getDayoffs({ tourIdx })
     const tourAvailable = Dayoff.getTourAvailable(year, month, dayoffs)
 
+    // set cache tour dates
     await this.redisService.setTourAvailable(
       { tourIdx, year, month },
       tourAvailable,
