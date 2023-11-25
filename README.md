@@ -51,6 +51,14 @@
 
 일정에 변동이 없을 경우 캐시된 일정을 불러옵니다.
 
+### 공통 - 투어 휴일 목록 조회
+
+```
+[GET] /tours/:tourIdx/dayoff
+```
+
+투어의 휴일 목록을 조회할 수 있는 API입니다.
+
 ---
 
 ### 고객 - 투어 예약 신청
@@ -155,16 +163,6 @@
   - month: number (1 ~ 12. required when type is 'DATE')
   - date: number (1 ~ 31. required when type is 'DATE')
   - day: number (0[sunday] ~ 6[saturday]. required when type is 'DAY')
-
-### 판매자 - 투어 휴일 목록 조회
-
-```
-[GET] /tours/:tourIdx/dayoff
-```
-
-[로그인이 필요]
-
-투어의 휴일 목록을 조회할 수 있는 API입니다.
 
 ### 판매자 - 투어 휴일 지정 취소
 

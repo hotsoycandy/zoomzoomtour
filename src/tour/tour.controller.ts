@@ -64,6 +64,12 @@ export class TourController {
     return await this.tourSerivce.getTourAvailable({ tourIdx, year, month })
   }
 
+  @Get('/:tourIdx/dayoffs')
+  async getDayoffs(@Param('tourIdx') tourIdx: number): Promise<DayoffDto[]> {
+    const dayoffs = await this.dayoffService.getDayoffs({ tourIdx })
+    return dayoffs.map((dayoff) => DayoffDto.from(dayoff))
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('/:tourIdx/books')
   async createBook(
